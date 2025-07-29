@@ -1,0 +1,41 @@
+skillswap/
+│
+├── app/
+│   ├── __init__.py          # App factory / App setup (called "factory")
+│   ├── config.py            # Config settings / # Settings like database connection
+│   ├── extensions.py        # db, jwt, marshmallow init / Third-party tools like SQLAlchemy
+│   │
+│   ├── models/              # DB models
+│   │   ├── user.py	     # Your database tables
+│   │   ├── skill.py
+│   │   └── session.py
+│   │
+│   ├── schemas/             # Marshmallow schemas
+│   │   ├── user.py	     # Validation using Marshmallow
+│   │   ├── skill.py
+│   │   └── session.py
+│   │
+│   ├── routes/              # Blueprints for API routes
+│   │   ├── auth.py	     # APIs/URLs (what users interact with)
+│   │   ├── skill.py
+│   │   └── session.py
+│   │
+│   ├── services/            # Business logic
+│   │   ├── match_service.py
+│   │   └── email_service.py
+│   │
+│   ├── utils/               # Helper functions
+│   │   ├── token.py
+│   │   └── validators.py
+│   │
+│   └── templates/           # (if using server-rendered HTML)
+│
+├── migrations/              # Flask-Migrate scripts
+│
+├── instance/                # Local settings (secret config)
+│   └── config.py
+│
+├── run.py                   # Entry point
+├── requirements.txt
+└── README.md
+where would b env file?
