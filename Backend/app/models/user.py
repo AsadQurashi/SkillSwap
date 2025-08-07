@@ -11,6 +11,9 @@ class User(db.Model):
     email = db.Column(db.String(128), unique = True, nullable = False)
     password_hash = db.Column(db.String(512), nullable = False)
 
+    # For role admin/user
+    role = db.Column(db.String(20), nullable = False , default = 'user')
+
     # Relational attributes
     skills = db.relationship('Skill' , backref = 'user' , lazy = True )
     sessions = db.relationship('Session' , backref='user' , lazy = True)
@@ -22,4 +25,4 @@ class User(db.Model):
         return check_password_hash(self.password_hash , password)
     
     def __repr__(self):
-        return f"<User {self.id} - {self.email}"
+        return f"<User {self.id} - {self.email} - {self.role}"

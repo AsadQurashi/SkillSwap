@@ -38,4 +38,54 @@ skillswap/
 ├── run.py                   # Entry point
 ├── requirements.txt
 └── README.md
-where would b env file?
+
+/skillswap-frontend
+│
+├── public/                     # Static assets
+│
+├── app/                        # App router structure
+│   ├── layout.js               # Root layout (includes <html> and <body>)
+│   ├── page.js                 # Homepage (/)
+│
+│   ├── login/                  # /login route
+│   │   └── page.js
+│
+│   ├── signup/                 # /signup route
+│   │   └── page.js
+│
+│   ├── dashboard/              # /dashboard route (protected)
+│   │   └── page.js
+│
+│   ├── skill/                  # Nested route: /skill
+│   │   ├── page.js             # Skill listing
+│   │   └── create/             # /skill/create
+│   │       └── page.js
+│
+│   ├── session/                # Nested route: /session
+│   │   ├── page.js             # All sessions
+│   │   └── create/             # /session/create
+│   │       └── page.js
+│
+│   └── globals.css             # Import in layout.js (Tailwind or other global styles)
+│
+├── components/                 # Reusable UI components
+│   ├── Navbar.js
+│   ├── Footer.js
+│   ├── SkillCard.js
+│   ├── SessionCard.js
+│   └── ProtectedRoute.js       # Optional: client-side protection
+│
+├── context/                    # React context providers
+│   └── AuthContext.js
+│
+├── services/                   # API calls (fetch/axios)
+│   ├── authService.js
+│   ├── skillService.js
+│   └── sessionService.js
+│
+├── utils/                      # Utility functions
+│   └── token.js
+│
+├── .env.local                  # API base URL and secrets
+├── next.config.js              # Next.js config
+└── package.json
