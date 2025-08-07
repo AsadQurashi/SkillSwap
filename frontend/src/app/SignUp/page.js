@@ -29,9 +29,10 @@ export default function SignUp()
 
         try {
           const response = await SignUpUser(form);
+          console.log("Response from backend:", response);
           setSuccess("Account created successfully!");
           setTimeout(() => {
-            SignIn(response.token);
+            SignIn(response.access_token);
           }, 2000);
           
         } catch (err) 

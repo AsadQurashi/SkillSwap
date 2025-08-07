@@ -7,6 +7,7 @@ export default function Navbar() {
         <Link href="/">Home</Link>
         <Link href="/SignIn"> SignIn </Link>
         <Link href="/SignUp">SignUp</Link>
+        <Link href="/CreateSkill">SkillForm</Link>
       </nav>
     );
 }

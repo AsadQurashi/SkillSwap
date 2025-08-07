@@ -3,6 +3,7 @@
 import { useAuth } from "@/app/context/AuthContext";
 import { SignInUser } from "@/app/services/authServices";
 import { useState } from "react";
+import { saveToken } from "../utils/token";
 
 export default function SignIn() {
   const { SignIn } = useAuth();
@@ -20,7 +21,8 @@ export default function SignIn() {
     setError("");
     try {
       const response = await SignInUser(form);
-      SignIn(response.token);
+      console.log("Token",response.token);
+      SignIn(response.access_token);
     } catch (err) {
       if (err.message.includes("User dosen't exist"))
       {
@@ -121,7 +123,7 @@ export default function SignIn() {
             loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
           } text-white py-2 rounded-md text-lg transition-colors duration-300`}
         >
-          {loading ? "Logging in..." : "Login"}
+          {loading ? "Signing in..." : "Sign In"}
         </button>
 
         <p className="text-center text-sm text-gray-500">
