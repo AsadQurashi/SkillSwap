@@ -11,6 +11,7 @@ export default function SignIn() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  
   const handleInputChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -21,8 +22,8 @@ export default function SignIn() {
     setError("");
     try {
       const response = await SignInUser(form);
-      console.log("Token",response.token);
-      SignIn(response.access_token);
+      console.log("Token",response.access_token);
+      SignIn(response.access_token, response.user);
     } catch (err) {
       if (err.message.includes("User dosen't exist"))
       {
@@ -127,7 +128,7 @@ export default function SignIn() {
         </button>
 
         <p className="text-center text-sm text-gray-500">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <a href="/SignUp" className="text-blue-600 hover:underline">
             Sign up
           </a>

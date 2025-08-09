@@ -1,8 +1,10 @@
-"use client"
+"use client";
 
 import { SignUpUser } from "../services/authServices";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 
 export default function SignUp()
 {
@@ -13,6 +15,7 @@ export default function SignUp()
         password: "",
     });
 
+  const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
@@ -30,10 +33,9 @@ export default function SignUp()
         try {
           const response = await SignUpUser(form);
           console.log("Response from backend:", response);
-          setSuccess("Account created successfully!");
-          setTimeout(() => {
-            SignIn(response.access_token);
-          }, 2000);
+          setSuccess("Account created successfully! Redirecting...");
+          // await SignIn(response.access_token , response.user);
+          router.push('/SignIn')
           
         } catch (err) 
         {

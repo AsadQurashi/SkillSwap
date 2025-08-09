@@ -13,6 +13,7 @@ export default function SkillForm() {
     link: "",
     image: null,
     document: null,
+    level: ""
   });
 
   const [error, setError] = useState("");
@@ -27,16 +28,20 @@ export default function SkillForm() {
 
     try {
       const token = getToken();
+      console.log("DEBUG token:", token);
+
+      
       const data = new FormData();
 
       data.append("name", form.name);
       data.append("description", form.description);
       data.append("link", form.link);
+      data.append("level", form.level);
       if (form.video) data.append("video", form.video);
       if (form.image) data.append("image", form.image);
       if (form.document) data.append("document", form.document);
 
-      console.log("DEBUG token:", token);
+      
 
       const response = await CreateSkill(data, token);
       setSuccess("✅ Skill created successfully!");
@@ -63,6 +68,7 @@ export default function SkillForm() {
       link: "",
       image: null,
       document: null,
+      level : ""
     });
     setError("");
     setSuccess("");
@@ -116,6 +122,23 @@ export default function SkillForm() {
             />
           </div>
 
+          {/* Level */}
+          <div>
+            <label className="block mb-1 font-semibold text-gray-800">
+              📊 Skill Level *
+            </label>
+            <select
+              required
+              value={form.level}
+              onChange={(e) => setForm({ ...form, level: e.target.value })}
+              className="w-full px-4 py-3 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            >
+              <option value="">-- Select Level --</option>
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Expert">Expert</option>
+            </select>
+          </div>
           {/* Video Upload */}
           <div>
             <label className="block mb-1 font-semibold text-gray-800">

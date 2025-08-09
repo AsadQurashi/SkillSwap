@@ -16,9 +16,9 @@ def createApp():
     jwt.init_app(app)
 
 
-    # with app.app_context():
-    #     db.create_all()
-    #     print("Databse is created")
+    with app.app_context():
+        db.create_all()
+        print("Databse is created")
 
     # Register all Routes
     app.register_blueprint(auth_bp)

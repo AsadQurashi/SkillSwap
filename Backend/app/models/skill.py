@@ -6,6 +6,12 @@ class Skill(db.Model):
 
     id = db.Column(db.Integer , primary_key = True)
     name = db.Column(db.String(100), nullable= False)
+    description = db.Column(db.String(250))
+    video = db.Column(db.String(255))
+    link = db.Column(db.String(255))
+    image = db.Column(db.String(255))
+    document = db.Column(db.String(255))
+
     level = db.Column(db.String(50), default = 'Beginner') #Beginner / Intermediate / Expert
 
     # Getting user id by using foreign key of the given table name
