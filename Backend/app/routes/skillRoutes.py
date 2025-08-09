@@ -76,8 +76,65 @@ def GetSkills():
 
 
 # By id
-@skill_bp.route('/GetBtId', methods= ['GET'])
+@skill_bp.route('/GetBtId/<int:skill_id>', methods= ['GET'])
 @jwt_required()
 
-def GetById():
-     pass
+def GetById(skill_id):
+    user_id = get_jwt_identity()
+    skill = Skill.query.filter_by(id=skill_id , user_id = user_id).first()
+    if not skill:
+        return jsonify("Skill not found"), 404
+    
+    return skill_Schema.dump(skill), 200
+
+# Update Skill
+@skill_bp.route('/UpdateSkill/<int:skill_id>', methods = ['PUT'])
+@jwt_required()
+def UpdateSkill(skiill_id):
+    user_id = get_jwt_identity()
+    skill = Skill.query.filter_by(id = skiill_id , user_id = user_id).first()
+
+    if not skill:
+        return jsonify("Skill not found"),404
+    
+    update_data = {
+        "name" : request.form.get('name' , skill.name),
+        "description" : request.form.get('description', skill.description),
+        "link" : request.form.get('link', skill.link),
+        "level" : request.form.get('level', skill.level)
+    }
+
+    try:
+        validate_data = skill_Schema.load(update_data , partial=True)
+    except ValidationError as error:
+        return jsonify(error.messages),400 
+    
+    # Update file
+    if "video" in request.files:
+        skill.video = save_file(request.files.get('video'), 'Videos')
+    if "image" in request.files:
+        skill.image = save_file(request.files.get('image'), 'Images')
+    if "document" in request.files:
+        skill.document = save_file(request.files.get('document'), "Documnets")
+
+
+    # Update Fields
+    for key , value in validate_data.items():
+        setattr(skill , key , value)
+        
+    db.session.commit()
+    return skill_Schema.dump(skill),200
+
+# Delete Skills
+@skill_bp.route('/DeleteById/<int:skill_id>', methods=['DELETE'])
+@jwt_required()
+def DeleteById(skill_id):
+    user_id = get_jwt_identity()
+    skill = Skill.query.filter_by(id = skill_id , user_id = user_id).first()
+
+    if not skill:
+        return jsonify("Skill not found"), 404
+    
+    db.session.delete(skill)
+    db.session.commit()
+    return jsonify({"message":"Skill deleted successfuly"}),200

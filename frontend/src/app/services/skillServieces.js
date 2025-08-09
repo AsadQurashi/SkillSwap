@@ -31,7 +31,6 @@ export const GetAllSkills = async (token) => {
         if (!token) {
             throw new Error("no token found");
         }
-
         const response = await axios.get(`${API}/Skill/GetAllSkills`,
             {
                 headers: {
@@ -54,12 +53,13 @@ export const GetById = async (id, token) => {
             throw new Error("token not found");
         }
 
-        const response = await axios.get(`${API}/Skill/GetById${id}`, {
+        const response = await axios.get(`${API}/Skill/GetById/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         }
         )
+        return response.data;
     }
     catch (error) {
         console.error("Error in getting skill by id", error?.response?.data || error.message);
@@ -73,13 +73,16 @@ export const UpdateSkill = async (id, data, token) => {
         if (!token) {
             throw new Error("Token not found");
         }
-        const response = await axios.put(`${API}/Skill/UpdateSkill${id}`, data,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
+        const response = await axios.put(
+          `${API}/Skill/UpdateSkill/${id}`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
+        return response.data;
 
     }
     catch (error) {
@@ -97,13 +100,14 @@ export const DeleteSkill = async (id, token) =>
         {
             throw new Error("token not found");
         }
-        const response = await axios.delete(`${API}/Skill/DeleteById${id}`,
+        const response = await axios.delete(`${API}/Skill/DeleteById/${id}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             }
         );
+        return response.data;
     }
     catch (error)
     {
