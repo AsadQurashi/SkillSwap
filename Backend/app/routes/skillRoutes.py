@@ -43,9 +43,9 @@ def SkillPostMehtod():
         return jsonify(err.messages),400
 
     file_path = {
-        "video" : save_file(request.files.get("video") , "videos"),
-        "image" : save_file(request.files.get("image") , "images"),
-        "document" : save_file(request.files.get("document") , "documents")
+        "video": save_file(request.files.get('video'), 'videos'),
+        "image": save_file(request.files.get('image'), 'images'),
+        "document": save_file(request.files.get('document'), 'documents')
     }
     # Adding to database after validation
     skill = Skill(name = validate_data['name'],
@@ -56,6 +56,8 @@ def SkillPostMehtod():
                 image = file_path['image'],
                 document = file_path['document'],
                 user_id = user_id)
+    
+    print("Image path",skill.image)
 
     # pushing to database
     db.session.add(skill)
@@ -70,13 +72,28 @@ def GetSkills():
     # Its for current user only for themself
     stored_user_id = get_jwt_identity()
     data = Skill.query.filter_by(user_id=stored_user_id).all()
-
+    # data = data['image'].replace("\\","/") wrong way to convert list to web friendly
+    
+    # Right way is to use for
+    for skill in data:
+        if skill.image:
+            skill.image = f"/uploads/skills/{skill.image.replace('\\','/')}"
+            # skill.image = f"/uploads{clean_path}"
+            print("Skill Images : ",skill.image)
+        if skill.video:
+            skill.video = f"/uploads/skills/{skill.video.replace("\\","/")}"
+            print("Skill Video : ",skill.video)
+        
+        if skill.document:
+            skill.document = f"/uploads/skills/{skill.document.replace("\\","/")}"
+            print("Skill document : ",skill.document)
+            
     # data = Skill.query.all()
     return skills_Schema.dump(data) , 200
 
 
 # By id
-@skill_bp.route('/GetBtId/<int:skill_id>', methods= ['GET'])
+@skill_bp.route('/GetById/<int:skill_id>', methods= ['GET'])
 @jwt_required()
 
 def GetById(skill_id):
@@ -90,9 +107,9 @@ def GetById(skill_id):
 # Update Skill
 @skill_bp.route('/UpdateSkill/<int:skill_id>', methods = ['PUT'])
 @jwt_required()
-def UpdateSkill(skiill_id):
+def UpdateSkill(skill_id):
     user_id = get_jwt_identity()
-    skill = Skill.query.filter_by(id = skiill_id , user_id = user_id).first()
+    skill = Skill.query.filter_by(id = skill_id , user_id = user_id).first()
 
     if not skill:
         return jsonify("Skill not found"),404
@@ -111,11 +128,11 @@ def UpdateSkill(skiill_id):
     
     # Update file
     if "video" in request.files:
-        skill.video = save_file(request.files.get('video'), 'Videos')
+        skill.video = save_file(request.files.get('video'), 'videos')
     if "image" in request.files:
-        skill.image = save_file(request.files.get('image'), 'Images')
+        skill.image = save_file(request.files.get('image'), 'images')
     if "document" in request.files:
-        skill.document = save_file(request.files.get('document'), "Documnets")
+        skill.document = save_file(request.files.get('document'), "documents")
 
 
     # Update Fields

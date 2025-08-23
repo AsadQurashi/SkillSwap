@@ -16,8 +16,9 @@ class User(db.Model):
 
     # Relational attributes
     skills = db.relationship('Skill' , back_populates = 'user' , lazy = True )
-    sessions = db.relationship('Session' , backref='user' , lazy = True)
-
+    # sessions = db.relationship('Session' , backref='user' , lazy = True)
+    requester_sessions = db.relationship("Session", back_populates="requester", foreign_keys="Session.requester_id")
+    reciever_sessions = db.relationship("Session", back_populates="reciever", foreign_keys= "Session.reciever_id")
     def setPassword(self , password):
         self.password_hash = generate_password_hash(password)
 

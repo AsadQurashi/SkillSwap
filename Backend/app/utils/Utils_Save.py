@@ -11,6 +11,7 @@ def save_file(file , subfolder):
     if not file:
         return None
     
+    subfolder = subfolder.lower()
     filename = secure_filename(file.filename)
     folder_path = os.path.join(UPLOAD_FOLDER , subfolder)
     os.makedirs(folder_path, exist_ok=True) #id folder dosent exist then create it
@@ -18,5 +19,12 @@ def save_file(file , subfolder):
     filepath = os.path.join(folder_path, filename)
     file.save(filepath)
 
+    print("Absolute image path on disk:", os.path.abspath(filepath))
+    print("Directory exists?", os.path.exists(os.path.dirname(filepath)))
+    print("File exists?", os.path.exists(filepath))
 
-    return filepath
+    print("File Path : ",filepath)
+    return f"{subfolder}/{filename}".replace("\\","/")
+    # Convert to URL path (forward slashes only)
+    # return f"{UPLOAD_FOLDER}/{subfolder}/{filename}".replace("\\","/")
+    

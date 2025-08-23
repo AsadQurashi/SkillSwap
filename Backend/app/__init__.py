@@ -6,6 +6,11 @@ from app.routes.skillRoutes import skill_bp
 from app.routes.SessionRoutes import session_bp
 from flask_cors  import CORS
 
+# 
+from flask import send_from_directory
+import os
+
+
 
 def createApp():
     app = Flask(__name__)
@@ -15,6 +20,10 @@ def createApp():
     ms.init_app(app)
     jwt.init_app(app)
 
+    @app.route('/uploads/skills/<path:filename>')
+    def uploaded_file(filename):
+        uploads_path = os.path.join(app.root_path, '..', 'uploads', 'skills')
+        return send_from_directory(os.path.abspath(uploads_path), filename)
 
     with app.app_context():
         db.create_all()
@@ -24,4 +33,6 @@ def createApp():
     app.register_blueprint(auth_bp)
     app.register_blueprint(skill_bp)
     app.register_blueprint(session_bp)
+
+    
     return app
