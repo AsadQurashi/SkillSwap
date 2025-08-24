@@ -27,5 +27,5 @@ export default function EditSkillPage() {
 
   if (!skillData) return <p className="p-6">Loading skill...</p>;
 
-  return <SkillForm editSKill={skillData} />;
+  return <SkillForm editSKill={skillData} id = {id} />;
 }

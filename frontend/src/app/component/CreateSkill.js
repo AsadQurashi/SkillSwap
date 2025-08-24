@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { getToken } from "../utils/token";
 import { Loader2, XCircle } from "lucide-react";
 import { CreateSkill, UpdateSkill } from "../services/skillServieces"; // make sure UpdateSkill is imported
+import CreateSession from "../services/sessionServices";
 
-export default function SkillForm({ editSKill, onComplete, onCancel }) {
+export default function SkillForm({ editSKill, onComplete, onCancel ,id }) {
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -89,6 +90,7 @@ export default function SkillForm({ editSKill, onComplete, onCancel }) {
     setSuccess("");
     if (onCancel) onCancel();
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-100 to-pink-100 flex items-center justify-center px-4">

@@ -70,8 +70,7 @@ def SkillPostMehtod():
 @jwt_required()
 def GetSkills():
     # Its for current user only for themself
-    stored_user_id = get_jwt_identity()
-    data = Skill.query.filter_by(user_id=stored_user_id).all()
+    data = Skill.query.all()
     # data = data['image'].replace("\\","/") wrong way to convert list to web friendly
     
     # Right way is to use for

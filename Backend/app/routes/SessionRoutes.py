@@ -17,11 +17,13 @@ list_session = SessionSchema(many=True)
 def CreateSession():
     data = request.get_json() or {}
     store_user_id = get_jwt_identity()
+
+    print("JWT identity:", store_user_id)
+    print("Incoming data:", data)
     # data['requester_id'] = store_user_id
     errors = create_session.validate(data)
     if errors:
         return jsonify(errors),400
-    
     
     session = Session( **data, requester_id=store_user_id)
     db.session.add(session)

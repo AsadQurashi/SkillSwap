@@ -6,6 +6,7 @@ import { getToken } from "../utils/token";
 import { Loader2, Edit, Trash2, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Details } from "./DetailSkills";
+import CreateSession from "../services/sessionServices";
 
 export default function SkillList({  reFreshTrigger  }) {
   const [skills, setSkills] = useState([]);
@@ -13,6 +14,7 @@ export default function SkillList({  reFreshTrigger  }) {
   const [error, setError] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [selectSkill, setSelectedSkill] = useState(null);
+  const [session, setSession] = useState(0)
   
   const router = useRouter();
 
@@ -46,6 +48,38 @@ export default function SkillList({  reFreshTrigger  }) {
       setError("Failed to delete skill. Please try again.");
     }
   };
+
+  // CreateSession
+  const createSession = async (skill) =>
+  {
+
+    const exact_time = new Date();
+    // const scheduleTime = exact_time.toISOString().split('.')[0]; //UTC time standard
+    const scheduleTime = exact_time.toLocaleString("sv-SE").replace(" ", ":");
+    console.log("Exact Time : ", scheduleTime);
+    console.log("User id ", skill.user_id)
+    if (!skill.user_id)
+    { setError("User dosen't exist") }
+    try {
+      const token = getToken();
+      console.log("Session token :", token);
+      const sessionData = {
+        skillName: skill.name, 
+        scheduleTime: scheduleTime,
+        reciever_id : skill.user_id
+      }
+      const response = await CreateSession(sessionData, token);
+      setSession(response.data);
+      console.log("Session response : ", response);
+      setError("");
+    }
+    catch(err)
+    {
+      console.error("Session creation failed:", err);
+    setError("Failed to create session. Please try again.");
+  }
+
+  }
   
   useEffect(() => {
     loadSkills();
@@ -116,6 +150,15 @@ console.log("SkillList props:", { reFreshTrigger });
                   className="p-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-full transition-colors"
                 >
                   <Trash2 size={18} />
+                </button>
+                <button 
+                  onClick={() => {
+                    createSession(skill);
+                    console.log("User id", skill.user_id)
+                    
+                  }}
+                  className="text-blue-500 flex items-center gap-1">
+                  Creat Session
                 </button>
               </div>
             </div>
