@@ -1,6 +1,6 @@
 from flask import Blueprint , request , jsonify
 from app.models.session import Session
-from app.extensions import db
+from app.extensions import db , socketio
 from app.schemas.SessionSchema import SessionSchema
 from flask_jwt_extended import jwt_required , get_jwt_identity
 from sqlalchemy import or_
@@ -29,7 +29,19 @@ def CreateSession():
     db.session.add(session)
     db.session.commit()
 
+    # --- NEW: real-time notify the receiver ---
+    try:
+        payload = create_session.dump(session)
+        # emit only to receiver's room
+        socketio.emit("new_session", payload, room=f"user{session.reciever_id}")
+    
+    except Exception as e:
+        print("Socket emit failed : ",e)
+    # ------------------------------------------
+
     return create_session.dump(session),201
+
+# Response session
 
 @session_bp.route("/ResponseSession/<int:session_id>" , methods=['POST'])
 @jwt_required()

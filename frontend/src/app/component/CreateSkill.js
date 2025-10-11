@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getToken } from "../utils/token";
 import { Loader2, XCircle } from "lucide-react";
 import { CreateSkill, UpdateSkill } from "../services/skillServieces"; // make sure UpdateSkill is imported
-import CreateSession from "../services/sessionServices";
+
 
 export default function SkillForm({ editSKill, onComplete, onCancel ,id }) {
   const [form, setForm] = useState({

@@ -1,6 +1,6 @@
 from flask import Flask
 from app.config import Config
-from app.extensions import db , ms , jwt
+from app.extensions import db , ms , jwt , socketio
 from app.routes.authRoutes import auth_bp
 from app.routes.skillRoutes import skill_bp
 from app.routes.SessionRoutes import session_bp
@@ -19,6 +19,7 @@ def createApp():
     db.init_app(app)
     ms.init_app(app)
     jwt.init_app(app)
+    socketio.init_app(app)
 
     @app.route('/uploads/skills/<path:filename>')
     def uploaded_file(filename):
