@@ -2,6 +2,7 @@ import "./globals.css";
 // import Navbar from "@/component/Navbar";
 // import { usePathname } from "next/navigation";
 import ClientLayout from "@/app/component/ClinetLayout";
+import SocketProvider from "./context/SocketProvider";
 
 export const metadata = {
   title: "SkillSwap",
@@ -21,7 +22,9 @@ export default function RootLayout({ children }) {
       <body style={{ margin: 0, backgroundColor: '#f9f9f9', color: '#000' }}>
         {/* {showNavbar && <Navbar />}
         {children} */}
-        <ClientLayout> {children} </ClientLayout>
+        <SocketProvider>
+          <ClientLayout> {children} </ClientLayout>
+        </SocketProvider>
       </body>
     </html>
   );

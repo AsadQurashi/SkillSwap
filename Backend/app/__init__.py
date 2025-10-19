@@ -5,6 +5,7 @@ from app.routes.authRoutes import auth_bp
 from app.routes.skillRoutes import skill_bp
 from app.routes.SessionRoutes import session_bp
 from flask_cors  import CORS
+from app.socket_handler import init_socket_handlers
 
 # 
 from flask import send_from_directory
@@ -21,14 +22,17 @@ def createApp():
     jwt.init_app(app)
     socketio.init_app(app)
 
+    # initialize socket
+    init_socket_handlers(socketio)
+
     @app.route('/uploads/skills/<path:filename>')
     def uploaded_file(filename):
         uploads_path = os.path.join(app.root_path, '..', 'uploads', 'skills')
         return send_from_directory(os.path.abspath(uploads_path), filename)
 
-    with app.app_context():
-        db.create_all()
-        print("Databse is created")
+    # with app.app_context():
+    #     db.create_all()
+    #     print("Databse is created")
 
     # Register all Routes
     app.register_blueprint(auth_bp)

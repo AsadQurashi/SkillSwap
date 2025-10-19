@@ -20,12 +20,22 @@ def CreateSession():
 
     print("JWT identity:", store_user_id)
     print("Incoming data:", data)
+    print("Requester ID :",store_user_id)
+    print("Reciever id",data.get("reciever_id"))
     # data['requester_id'] = store_user_id
+
+    
+    if data.get("reciever_id") == store_user_id:
+        return jsonify({"error" : "Cannot create session with yourself"}),400
+
     errors = create_session.validate(data)
     if errors:
         return jsonify(errors),400
     
+
+
     session = Session( **data, requester_id=store_user_id)
+
     db.session.add(session)
     db.session.commit()
 
@@ -33,7 +43,8 @@ def CreateSession():
     try:
         payload = create_session.dump(session)
         # emit only to receiver's room
-        socketio.emit("new_session", payload, room=f"user{session.reciever_id}")
+        socketio.emit("new_session", payload, room=f"user_{session.reciever_id}")
+        print("Session reciever id : ",session.reciever_id)
     
     except Exception as e:
         print("Socket emit failed : ",e)

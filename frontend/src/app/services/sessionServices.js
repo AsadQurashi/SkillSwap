@@ -3,7 +3,7 @@ import axios from "axios";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 
-export default async function CreateSession(sessionData, token)
+export const CreateSession= async (sessionData, token) =>
 { 
     const response = await axios.post(`${API}/session/CreateSession`,sessionData , {
       headers: {
@@ -11,7 +11,7 @@ export default async function CreateSession(sessionData, token)
           "Content-type" : "application/json",
       },
     });
-
+  console.log("CreateSessionResponse : ", response);
     return response.data;
 }
 
@@ -21,7 +21,7 @@ export const GetAllSessions = async (token) =>
   try {
     if (!token)
     {
-      throw new error("Token not found");
+      throw new Error("Token not found");
     }
     const response = await axios.get(`${API}/session/GetSessionList`, {
       headers:
@@ -43,13 +43,15 @@ export const RespondSession = async (sessionId , action , token) =>
   try {
     if (!token)
     {
-      throw new error("Token not found");
+      throw new Error("Token not found");
     }
     const response = await axios.post(`${API}/session/ResponseSession/${sessionId}`, { action }, {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        "Content-Type" : "application/json"
       }
     });
+    console.log("Respond Session : ",response.data)
     return response.data;
   }
   catch (error)
