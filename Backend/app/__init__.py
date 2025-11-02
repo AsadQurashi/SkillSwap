@@ -4,6 +4,7 @@ from app.extensions import db , ms , jwt , socketio
 from app.routes.authRoutes import auth_bp
 from app.routes.skillRoutes import skill_bp
 from app.routes.SessionRoutes import session_bp
+from app.routes.adminroutes import admin_bp
 from flask_cors  import CORS
 from app.socket_handler import init_socket_handlers
 
@@ -30,14 +31,15 @@ def createApp():
         uploads_path = os.path.join(app.root_path, '..', 'uploads', 'skills')
         return send_from_directory(os.path.abspath(uploads_path), filename)
 
-    # with app.app_context():
-    #     db.create_all()
-    #     print("Databse is created")
+    with app.app_context():
+        db.create_all()
+        print("Databse is created")
 
     # Register all Routes
     app.register_blueprint(auth_bp)
     app.register_blueprint(skill_bp)
     app.register_blueprint(session_bp)
+    app.register_blueprint(admin_bp)
 
     
     return app

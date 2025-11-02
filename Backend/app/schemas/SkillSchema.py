@@ -8,5 +8,5 @@ class SkillSchema(Schema):
     image = fields.Str(dump_only=True)
     document = fields.Str(dump_only=True)
     link = fields.Url(required=False)
-    level = fields.Str(validate=validate.OneOf(['Beginner', 'Intermediate' , 'Expert']))
+    level = fields.Str(validate=validate.OneOf(['Beginner', 'Intermediate' , 'Expert' , 'Advanced']))
     user_id = fields.Int(required=True)

@@ -59,7 +59,15 @@ def SignIn():
             return jsonify({"message":"Password is incorrect"}),401
         
         access_token = create_access_token(identity= str(user.id))
-        return jsonify(message="Login successfully", access_token = access_token),200
+        return jsonify({"message":"Login successfully",
+                        "access_token" : access_token ,
+                        'user': {
+                            "id" : user.id,
+                            "name": user.name,
+                            "email":user.email,
+                            "role":user.role
+                            }
+                        }),200
     except Exception as e:
         return jsonify({"message": "An unexpected error occured ", "error":str(e)}),500
 

@@ -2,7 +2,7 @@
 
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { getToken , saveToken , removeToken } from "@/app/utils/token";
+import { getToken , saveToken , removeToken, getUser, saveUser, removeUser } from "@/app/utils/token";
 import { useRouter } from "next/navigation";
 
 const AuthContext = createContext();
@@ -20,11 +20,13 @@ export default function AuthProvider({children}) {
 
     useEffect(() => {
         const token = getToken();
-        if (token) {
+        const userData = getUser();
+        
+        if (token && userData) {
             setAuthState({
                 token,
-                user: null,
-                isAuthentictated: true,
+                user: userData,
+                isAuthenticated: true,
                 isLoading: false
             });
         }
@@ -34,25 +36,32 @@ export default function AuthProvider({children}) {
         }
     }, []);
 
-    const SignIn = (token , userData) => {
-        saveToken(token);
-        setAuthState({
-            token,
-            user: userData,
-            isAuthentictated: true,
-            isLoading: false,
-        });
-        router.push('/Dashboard');
-        router.refresh();
+    const SignIn = (token, userData) => {
+      console.log("🔑 SignIn received:", { token, userData }); // Add this
+      saveToken(token);
+      saveUser(userData);
+      setAuthState({
+        token,
+        user: userData,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+      if (userData.role === "admin" || userData.role === "super_admin") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/Dashboard");
+      }
+
+      router.refresh();
     };
 
     const SignOut = () => {
-        const token = getToken();
-        removeToken(token);
+        removeToken();
+        removeUser();
         setAuthState({
             token: null,
             user: null,
-            isAuthentictated: false,
+            isAuthenticated: false,
         })
         router.push('/SignIn');
         router.refresh()

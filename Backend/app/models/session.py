@@ -9,11 +9,8 @@ class Session(db.Model):
     skillName = db.Column(db.String(64) , nullable = False)
     scheduleTime = db.Column(db.DateTime , nullable = False , default = datetime.utcnow)
     status = db.Column(db.String(20) , default = 'pending')
-
     requester_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = False)
     reciever_id = db.Column(db.Integer , db.ForeignKey('users.id'), nullable = False)
-
-
     # RelationShip
     requester = db.relationship("User", back_populates="requester_sessions" , foreign_keys=[requester_id])
     reciever = db.relationship("User", back_populates="reciever_sessions", foreign_keys=[reciever_id])

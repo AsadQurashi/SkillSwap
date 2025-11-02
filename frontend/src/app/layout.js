@@ -3,6 +3,8 @@ import "./globals.css";
 // import { usePathname } from "next/navigation";
 import ClientLayout from "@/app/component/ClinetLayout";
 import SocketProvider from "./context/SocketProvider";
+import ErrorBoundary from "./component/ErrorBoundry";
+import ToastProvider from "./providers/ToastProvider";
 
 export const metadata = {
   title: "SkillSwap",
@@ -19,12 +21,16 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body style={{ margin: 0, backgroundColor: '#f9f9f9', color: '#000' }}>
+      <body style={{ margin: 0, backgroundColor: "#f9f9f9", color: "#000" }}>
         {/* {showNavbar && <Navbar />}
         {children} */}
-        <SocketProvider>
-          <ClientLayout> {children} </ClientLayout>
-        </SocketProvider>
+        <ErrorBoundary>
+          <SocketProvider>
+            <ClientLayout> {children} 
+              <ToastProvider />
+            </ClientLayout>
+          </SocketProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );
